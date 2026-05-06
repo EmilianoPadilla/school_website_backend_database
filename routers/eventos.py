@@ -25,12 +25,16 @@ def get_eventos(limit: int = 10, offset: int = 0):
 @router.get("/{evento_id}")
 def get_evento(evento_id: int):
     db = SessionLocal()
-    evento = db.query(EventoDB).filter(EventoDB.id == evento_id).first()
-    db.close()
-
+    evento = (
+        db.query(EventoDB)
+        .filter(EventoDB.id == evento_id)
+        .first()
+    )
+    
     if not evento:
         raise HTTPException(status_code=404, detail="Evento no encontrado")
-
+    
+    db.close()
     return evento
 
 
