@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from models import Evento, EventoUpdate, EventoDB
+from models import Evento, EventoUpdate, EventoDB, EventoResponse
 from database import SessionLocal
 
 
@@ -8,10 +8,10 @@ router = APIRouter(prefix="/eventos", tags=["Eventos"])
 
 ##################   GET   #########################
 
-@router.get("/")
+@router.get("/", response_model=list[EventoResponse])
 def get_eventos(limit: int = 10):
     db = SessionLocal()
-    eventos = db.query(EventoDB).limit(limit).all()
+    eventos = db.query(EventoDB).order_by(EventoDB.id).all()
     db.close()
 
     return eventos
@@ -23,8 +23,8 @@ def get_evento(evento_id: int):
     evento = db.query(EventoDB).filter(EventoDB.id == evento_id).first()
     db.close()
 
-    if not evento:
-        raise HTTPException(status_code=404, detail="Evento no encontrado")
+    # if not evento:
+    #     raise HTTPException(status_code=404, detail="Evento no encontrado")
 
     return evento
 

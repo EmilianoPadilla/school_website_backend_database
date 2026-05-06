@@ -66,3 +66,9 @@ class EventoDB(Base):
     titulo = Column(String)
     fecha = Column(String)
     ubicacion = Column(String)
+
+class EventoResponse(BaseModel):      #This is for getting the order I want.
+    id: int
+    titulo: str
+    fecha: str
+    ubicacion: str  
